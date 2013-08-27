@@ -1,7 +1,7 @@
 package com.batter.smsblocker;
 
-import android.app.Activity;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
-public class SettingActivity extends Activity {
+public class SettingActivity extends SlidingFragmentActivity {
 
 }
