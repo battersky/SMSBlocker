@@ -11,9 +11,12 @@
 # generated files
 bin/
 gen/
+.settings/
 
 # Local configuration file (sdk path, etc)
 local.properties
+resource.properties
+project.properties
 
 # Eclipse project files
 .classpath
