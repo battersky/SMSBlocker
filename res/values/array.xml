@@ -2,6 +2,7 @@
 <resources>
     <string-array name="menus">
         <item>OverView</item>
+        <item>BlockList</item>
         <item>History</item>
     </string-array>
 </resources>

@@ -1,4 +1,4 @@
-package com.batter.smsblocker;
+package com.batter.smsblocker.service;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;

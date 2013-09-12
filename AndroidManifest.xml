@@ -23,7 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name="com.batter.smsblocker.SmsReceiver">
+        <receiver android:name="com.batter.smsblocker.service.SmsReceiver">
             <intent-filter android:priority="1000"> 
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"></action>
             </intent-filter>
