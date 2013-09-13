@@ -14,6 +14,7 @@ public class SettingActivity extends SlidingFragmentActivity {
     private Fragment mOverViewFragment;
     private Fragment mHistoryFragment;
     private Fragment mMenuFragment;
+    private Fragment mBlocklistFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -21,9 +22,10 @@ public class SettingActivity extends SlidingFragmentActivity {
         setContentView(R.layout.content_frame);
 
         mOverViewFragment = new OverViewFragment();
+        mBlocklistFragment = new BlockListFragment();
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, mOverViewFragment).commit();
+                .replace(R.id.content_frame, mBlocklistFragment).commit();
 
         mMenuFragment = new MenuFragment();
         setBehindContentView(R.layout.menu_frame);

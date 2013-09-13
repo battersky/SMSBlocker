@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="listitem_blocklist_margin_left">10dp</dimen>
+    <dimen name="listitem_blocklist_margin_top">5dp</dimen>
+    <dimen name="listitem_blocklist_margin_bottom">2dp</dimen>
+    
+</resources>
