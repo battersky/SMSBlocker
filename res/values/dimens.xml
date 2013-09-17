@@ -4,5 +4,6 @@
     <dimen name="listitem_blocklist_margin_top">5dp</dimen>
     <dimen name="listitem_blocklist_margin_bottom">2dp</dimen>
     <dimen name="slidingmenu_offset">150dp</dimen>
+    <dimen name="newitem_blocklist_margin_all">10dp</dimen>
     
 </resources>

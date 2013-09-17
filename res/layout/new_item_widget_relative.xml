@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#00CCFF"
+    android:gravity="center_vertical"
+    android:padding="10dp" >
+
+    <ImageView android:src="@drawable/blocklist_new_item_save"
+        android:id="@+id/new_item_save"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"/>
+    <ImageView android:src="@drawable/blocklist_new_item_cancel"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/new_item_cancel"
+        android:layout_toLeftOf="@id/new_item_save"
+        android:layout_marginRight="10dp"/>
+    <EditText android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/new_item_cancel"
+        android:layout_marginRight="10dp" />   
+</RelativeLayout>

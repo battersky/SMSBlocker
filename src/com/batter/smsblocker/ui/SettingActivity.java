@@ -1,8 +1,6 @@
 package com.batter.smsblocker.ui;
 
 import com.batter.smsblocker.R;
-import com.batter.smsblocker.R.id;
-import com.batter.smsblocker.R.layout;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 

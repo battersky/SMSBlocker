@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/newitem_blocklist_margin_all" >
+
+    <com.batter.smsblocker.ui.NewItemWidget android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/content_new_block_item"
+        android:visibility="gone"/>
+    
+    <ListView android:id="@id/android:list"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:drawSelectorOnTop="false"
+               android:layout_below="@id/content_new_block_item"
+               android:layout_alignWithParentIfMissing="true"/>
+</RelativeLayout>

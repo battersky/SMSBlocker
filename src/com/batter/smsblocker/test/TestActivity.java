@@ -1,7 +1,6 @@
 package com.batter.smsblocker.test;
 
 import com.batter.smsblocker.R;
-import com.batter.smsblocker.R.layout;
 
 import android.app.Activity;
 import android.os.Bundle;
