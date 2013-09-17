@@ -33,5 +33,7 @@ public class SettingActivity extends SlidingFragmentActivity {
                 .replace(R.id.menu_frame, mMenuFragment).commit();
 
         getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+        getSlidingMenu().setBehindOffsetRes(R.dimen.slidingmenu_offset);
+        this.setSlidingActionBarEnabled(true);
     }
 }

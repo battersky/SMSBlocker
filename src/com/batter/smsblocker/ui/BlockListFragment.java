@@ -90,9 +90,17 @@ public class BlockListFragment extends SherlockListFragment implements LoaderMan
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        MenuItem item = menu.add("add");
-        item.setShowAsAction(
-                MenuItem.SHOW_AS_ACTION_ALWAYS);
-        item.setIcon(R.drawable.blocklist_add);
+        getSherlockActivity().getSupportMenuInflater().inflate(R.menu.setting_main_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.add_new_block_phone_num:
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 }
