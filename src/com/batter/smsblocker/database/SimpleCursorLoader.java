@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.support.v4.content.AsyncTaskLoader;
 
 public abstract class SimpleCursorLoader extends AsyncTaskLoader<Cursor> {
-    final ForceLoadContentObserver mObserver;
+    public final ForceLoadContentObserver mObserver;
 
     Cursor mCursor;
 
@@ -18,7 +18,7 @@ public abstract class SimpleCursorLoader extends AsyncTaskLoader<Cursor> {
      * Registers an observer to get notifications from the content provider
      * when the cursor needs to be refreshed.
      */
-    void registerContentObserver(Cursor cursor, ContentObserver observer) {
+    public void registerContentObserver(Cursor cursor, ContentObserver observer) {
         cursor.registerContentObserver(mObserver);
     }
 

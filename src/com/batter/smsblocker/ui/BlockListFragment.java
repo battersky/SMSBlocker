@@ -5,8 +5,11 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.batter.smsblocker.R;
+import com.batter.smsblocker.database.DatabaseUtils;
 import com.batter.smsblocker.database.SimpleCursorLoader;
 import com.batter.smsblocker.database.SmsBlockerDatabaseHelper;
+import com.batter.smsblocker.ui.NewItemWidget.NewItemWidgetButtonClickListener;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
@@ -20,11 +23,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class BlockListFragment extends SherlockListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class BlockListFragment extends SherlockListFragment
+        implements LoaderManager.LoaderCallbacks<Cursor>, NewItemWidgetButtonClickListener {
 
     private final static int BLOCKLIST_LOADER_ID = 0;
 
     private SimpleCursorAdapter mAdapter = null;
+
+    private NewItemWidget mNewItemWidget = null;
+
+    private DatabaseUtils mDatabaseUtils = null;
 
     private static class BlocklistCursorLoader extends SimpleCursorLoader {
 
@@ -35,15 +43,23 @@ public class BlockListFragment extends SherlockListFragment implements LoaderMan
         @Override
         public Cursor loadInBackground() {
             SmsBlockerDatabaseHelper databaseHelper = new SmsBlockerDatabaseHelper(getContext());
+            Cursor cursor = null;
             try {
                 SQLiteDatabase database = databaseHelper.getWritableDatabase();
-                return database.query(SmsBlockerDatabaseHelper.DATABASE_TABLE_NAME_SMS_BLOCKER_LIST,
+                cursor = database.query(SmsBlockerDatabaseHelper.DATABASE_TABLE_NAME_SMS_BLOCKER_LIST,
                         new String[] { "_id", "adddress" }, null, null, null, null, null);
                 //TO-Do should change the hard code column name to constant projection
             } catch (SQLException ex) {
-                MatrixCursor emptyCursor = new MatrixCursor(new String[] {"adddress"});
-                return emptyCursor;
+                cursor = new MatrixCursor(new String[] {"adddress"});
             }
+
+            if (cursor != null) {
+                // Ensure the cursor window is filled
+                cursor.getCount();
+                registerContentObserver(cursor, mObserver);
+            }
+
+            return cursor;
         }
 
     }
@@ -52,9 +68,11 @@ public class BlockListFragment extends SherlockListFragment implements LoaderMan
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getLoaderManager().initLoader(BLOCKLIST_LOADER_ID, null, this);
-        //setListShown(false);
-        this.setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
 
+        mNewItemWidget = (NewItemWidget)this.getView().findViewById(R.id.content_new_block_item);
+        mNewItemWidget.setNewItemWidgetButtonClickListener(this);
+        mDatabaseUtils = new DatabaseUtils(this.getActivity());
     }
 
     @Override
@@ -77,7 +95,6 @@ public class BlockListFragment extends SherlockListFragment implements LoaderMan
                     R.layout.listitem_blocklist, data, new String[] { "adddress" }, new int[] { R.id.number_item },
                     SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
             setListAdapter(mAdapter);
-            //setListShown(true);
         } else {
             mAdapter.changeCursor(data);
         }
@@ -100,11 +117,19 @@ public class BlockListFragment extends SherlockListFragment implements LoaderMan
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_new_block_phone_num:
-                this.getView().findViewById(R.id.content_new_block_item).setVisibility(View.VISIBLE);
+                mNewItemWidget.setVisibility(View.VISIBLE);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    @Override
+    public void onNewItemWidgetButtonClicked(int buttonType, CharSequence text) {
+        if (buttonType == NewItemWidget.BUTTON_TYPE_SAVE) {
+            mDatabaseUtils.addNewBlockPhoneNumber(text);
+        }
+        mNewItemWidget.setVisibility(View.GONE);
     }
 }

@@ -21,5 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/new_item_cancel"
-        android:layout_marginRight="10dp" />   
+        android:layout_marginRight="10dp"
+        android:id="@+id/blocklist_new_item_text_editor" />
 </RelativeLayout>
