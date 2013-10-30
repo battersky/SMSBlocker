@@ -14,12 +14,8 @@ public abstract class SimpleCursorLoader extends AsyncTaskLoader<Cursor> {
     @Override
     public abstract Cursor loadInBackground();
 
-    /**
-     * Registers an observer to get notifications from the content provider
-     * when the cursor needs to be refreshed.
-     */
-    public void registerContentObserver(Cursor cursor, ContentObserver observer) {
-        cursor.registerContentObserver(mObserver);
+    public ContentObserver getObserver() {
+        return mObserver;
     }
 
     /* Runs on the UI thread */

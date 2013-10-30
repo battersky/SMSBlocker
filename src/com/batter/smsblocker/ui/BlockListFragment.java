@@ -9,13 +9,17 @@ import com.batter.smsblocker.database.DatabaseUtils;
 import com.batter.smsblocker.database.SimpleCursorLoader;
 import com.batter.smsblocker.database.SmsBlockerDatabaseHelper;
 import com.batter.smsblocker.ui.NewItemWidget.NewItemWidgetButtonClickListener;
+import com.batter.smsblocker.util.Contant;
 
 import android.content.Context;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -56,13 +60,27 @@ public class BlockListFragment extends SherlockListFragment
             if (cursor != null) {
                 // Ensure the cursor window is filled
                 cursor.getCount();
-                registerContentObserver(cursor, mObserver);
             }
 
             return cursor;
         }
 
     }
+
+    private Handler mMessageHandler = new Handler() {
+            public void handleMessage(Message msg) {
+            switch(msg.what) {
+                case Contant.MSG_DATABASE_CONTENT_CHANGE:
+                    LoaderManager loaderManager = getLoaderManager();
+                    Loader loader = loaderManager.getLoader(BLOCKLIST_LOADER_ID);
+                    if (loader != null) {
+                        BlocklistCursorLoader blockListLoader = (BlocklistCursorLoader)loader;
+                        blockListLoader.getObserver().onChange(true);
+                }
+                break;
+            }
+        }
+    };
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -128,7 +146,7 @@ public class BlockListFragment extends SherlockListFragment
     @Override
     public void onNewItemWidgetButtonClicked(int buttonType, CharSequence text) {
         if (buttonType == NewItemWidget.BUTTON_TYPE_SAVE) {
-            mDatabaseUtils.addNewBlockPhoneNumber(text);
+            mDatabaseUtils.addNewBlockPhoneNumber(text, mMessageHandler);
         }
         mNewItemWidget.setVisibility(View.GONE);
     }
