@@ -1,6 +1,7 @@
 package com.batter.smsblocker.ui;
 
 import com.actionbarsherlock.app.SherlockListFragment;
+import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -12,7 +13,6 @@ import com.batter.smsblocker.ui.NewItemWidget.NewItemWidgetButtonClickListener;
 import com.batter.smsblocker.util.Contant;
 
 import android.content.Context;
-import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.SQLException;
@@ -26,6 +26,11 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ListView;
 
 public class BlockListFragment extends SherlockListFragment
         implements LoaderManager.LoaderCallbacks<Cursor>, NewItemWidgetButtonClickListener {
@@ -37,6 +42,8 @@ public class BlockListFragment extends SherlockListFragment
     private NewItemWidget mNewItemWidget = null;
 
     private DatabaseUtils mDatabaseUtils = null;
+
+    private ActionMode mActionMode = null;
 
     private static class BlocklistCursorLoader extends SimpleCursorLoader {
 
@@ -82,6 +89,43 @@ public class BlockListFragment extends SherlockListFragment
         }
     };
 
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.blocklist_action_mode_menu, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            ListView listView = getListView();
+            if (listView != null) {
+                listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.menu_recycle:
+                    return true;
+                default:
+                    return false;
+            }
+
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mActionMode = null;
+        }
+
+    };
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -91,6 +135,35 @@ public class BlockListFragment extends SherlockListFragment
         mNewItemWidget = (NewItemWidget)this.getView().findViewById(R.id.content_new_block_item);
         mNewItemWidget.setNewItemWidgetButtonClickListener(this);
         mDatabaseUtils = new DatabaseUtils(this.getActivity());
+
+
+        ListView listView = this.getListView();
+        if (listView != null) {
+            listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position,
+                        long id) {
+                    if (mActionMode != null) {
+                        return false;
+                    }
+
+                    mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
+                    view.setSelected(true);
+                    return true;
+                }
+
+            });
+            listView.setOnItemClickListener(new OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (mActionMode != null) {
+                        view.setBackgroundColor(getResources().getColor(R.color.select_block_list_item_background));
+                    }
+                }
+
+            });
+        }
     }
 
     @Override
