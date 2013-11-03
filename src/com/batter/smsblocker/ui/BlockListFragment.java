@@ -26,9 +26,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 
@@ -68,7 +66,6 @@ public class BlockListFragment extends SherlockListFragment
                 // Ensure the cursor window is filled
                 cursor.getCount();
             }
-
             return cursor;
         }
 
@@ -116,14 +113,16 @@ public class BlockListFragment extends SherlockListFragment
                 default:
                     return false;
             }
-
         }
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+
+            getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            getListView().clearChoices();
+            getListView().clearFocus();
             mActionMode = null;
         }
-
     };
 
     @Override
@@ -136,9 +135,9 @@ public class BlockListFragment extends SherlockListFragment
         mNewItemWidget.setNewItemWidgetButtonClickListener(this);
         mDatabaseUtils = new DatabaseUtils(this.getActivity());
 
-
         ListView listView = this.getListView();
         if (listView != null) {
+            listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             listView.setOnItemLongClickListener(new OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position,
@@ -148,20 +147,9 @@ public class BlockListFragment extends SherlockListFragment
                     }
 
                     mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
-                    view.setSelected(true);
+                    getListView().setItemChecked(position, true);
                     return true;
                 }
-
-            });
-            listView.setOnItemClickListener(new OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if (mActionMode != null) {
-                        view.setBackgroundColor(getResources().getColor(R.color.select_block_list_item_background));
-                    }
-                }
-
             });
         }
     }
