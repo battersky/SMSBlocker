@@ -109,6 +109,16 @@ public class BlockListFragment extends SherlockListFragment
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.menu_recycle:
+                    ListView listView = getListView();
+                    if (listView != null) {
+                        int selectedItemCount = listView.getCheckedItemCount();
+                        if (selectedItemCount > 0) {
+                            long[] ids = listView.getCheckedItemIds();
+                            for (int i = 0; i < ids.length; i ++) {
+                                DatabaseUtils.deleteBlockPhoneNumber(ids, mMessageHandler);
+                            }
+                        }
+                    }
                     return true;
                 default:
                     return false;

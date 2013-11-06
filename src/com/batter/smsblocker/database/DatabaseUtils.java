@@ -10,6 +10,36 @@ import android.os.Message;
 
 public class DatabaseUtils {
 
+    private static class DeletePhoneNumberThread extends Thread {
+
+        private long[] mIds;
+        private Handler mhandler;
+        public DeletePhoneNumberThread(Handler handler, long[] ids) {
+            super("delete-block-phone-number");
+            mIds = ids;
+            mhandler = handler;
+        }
+
+        @Override
+        public void run() {
+            SQLiteDatabase database = sSmsBlockerDatabaseHelper.getWritableDatabase();
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < mIds.length; i ++) {
+                if (i >= 1) {
+                    stringBuilder.append(" OR ");
+                }
+                stringBuilder.append("_id = " + mIds[i]);
+            }
+
+            database.delete(SmsBlockerDatabaseHelper.DATABASE_TABLE_NAME_SMS_BLOCKER_LIST,
+                    stringBuilder.toString(), null);
+            if (mhandler != null) {
+                Message messge = mhandler.obtainMessage(Contant.MSG_DATABASE_CONTENT_CHANGE);
+                mhandler.sendMessage(messge);
+            }
+        }
+    }
+
     private static class NewPhoneNumberThread extends Thread {
 
         private CharSequence mPhoneNumber;
@@ -41,5 +71,9 @@ public class DatabaseUtils {
 
     public static void addNewBlockPhoneNumber(CharSequence text, Handler handler) {
         new NewPhoneNumberThread(handler, text).start();
+    }
+
+    public static void deleteBlockPhoneNumber(long[] ids, Handler handler) {
+        new DeletePhoneNumberThread(handler, ids).start();
     }
 }
