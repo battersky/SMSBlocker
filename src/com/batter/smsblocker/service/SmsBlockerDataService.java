@@ -2,35 +2,25 @@ package com.batter.smsblocker.service;
 
 import java.util.ArrayList;
 
-import android.app.Service;
+import android.app.IntentService;
 import android.content.Intent;
-import android.os.IBinder;
 
-public class SmsBlockerDataService extends Service {
+public class SmsBlockerDataService extends IntentService {
+
+    public SmsBlockerDataService() {
+        super("sms-blocker-service");
+    }
 
     static ArrayList<String> mArrayList = new ArrayList<String>();
+    static boolean mStarted = false;
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    public static boolean isStarted() {
+        return mStarted;
     }
 
-    @Override
-    public void onStart(Intent intent, int startId) {
-        handleCommand(intent);
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        handleCommand(intent);
-        // We want this service to continue running until it is explicitly
-        // stopped, so return sticky.
-        return START_STICKY;
-    }
-
-    private void handleCommand(Intent intent) {
-        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-        }
+    public void onDestroy() {
+        super.onDestroy();
+        mStarted = false;
     }
 
     public static boolean isBlockedPhoneNumber(String number) {
@@ -40,4 +30,9 @@ public class SmsBlockerDataService extends Service {
         return false;
     }
 
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+        }
+    }
 }
