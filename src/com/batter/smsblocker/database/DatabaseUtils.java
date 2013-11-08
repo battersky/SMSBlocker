@@ -1,6 +1,6 @@
 package com.batter.smsblocker.database;
 
-import com.batter.smsblocker.util.Contant;
+import com.batter.smsblocker.util.Constant;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -34,7 +34,7 @@ public class DatabaseUtils {
             database.delete(SmsBlockerDatabaseHelper.DATABASE_TABLE_NAME_SMS_BLOCKER_LIST,
                     stringBuilder.toString(), null);
             if (mhandler != null) {
-                Message messge = mhandler.obtainMessage(Contant.MSG_DATABASE_CONTENT_CHANGE);
+                Message messge = mhandler.obtainMessage(Constant.MSG_DATABASE_CONTENT_CHANGE);
                 mhandler.sendMessage(messge);
             }
         }
@@ -57,7 +57,7 @@ public class DatabaseUtils {
             values.put("adddress", mPhoneNumber.toString());
             database.insert(SmsBlockerDatabaseHelper.DATABASE_TABLE_NAME_SMS_BLOCKER_LIST, null, values);
             if (mhandler != null) {
-                Message messge = mhandler.obtainMessage(Contant.MSG_DATABASE_CONTENT_CHANGE);
+                Message messge = mhandler.obtainMessage(Constant.MSG_DATABASE_CONTENT_CHANGE);
                 mhandler.sendMessage(messge);
             }
         }
@@ -75,5 +75,9 @@ public class DatabaseUtils {
 
     public static void deleteBlockPhoneNumber(long[] ids, Handler handler) {
         new DeletePhoneNumberThread(handler, ids).start();
+    }
+
+    public static SmsBlockerDatabaseHelper getDatabaseHelper() {
+        return sSmsBlockerDatabaseHelper;
     }
 }

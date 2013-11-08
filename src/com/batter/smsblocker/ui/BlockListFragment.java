@@ -10,7 +10,7 @@ import com.batter.smsblocker.database.DatabaseUtils;
 import com.batter.smsblocker.database.SimpleCursorLoader;
 import com.batter.smsblocker.database.SmsBlockerDatabaseHelper;
 import com.batter.smsblocker.ui.NewItemWidget.NewItemWidgetButtonClickListener;
-import com.batter.smsblocker.util.Contant;
+import com.batter.smsblocker.util.Constant;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -74,7 +74,7 @@ public class BlockListFragment extends SherlockListFragment
     private Handler mMessageHandler = new Handler() {
             public void handleMessage(Message msg) {
             switch(msg.what) {
-                case Contant.MSG_DATABASE_CONTENT_CHANGE:
+                case Constant.MSG_DATABASE_CONTENT_CHANGE:
                     LoaderManager loaderManager = getLoaderManager();
                     Loader loader = loaderManager.getLoader(BLOCKLIST_LOADER_ID);
                     if (loader != null) {
