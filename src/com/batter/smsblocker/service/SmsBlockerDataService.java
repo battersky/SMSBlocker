@@ -10,6 +10,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 
 public class SmsBlockerDataService extends IntentService {
@@ -33,11 +34,10 @@ public class SmsBlockerDataService extends IntentService {
 
     public void onDestroy() {
         super.onDestroy();
-        //sState = SERVICE_STATE_SHUTTING_DOWN;
     }
 
     public static boolean isBlockedPhoneNumber(String number) {
-        if (mArrayList.contains(number)) {
+        if (mArrayList.contains(PhoneNumberUtils.toCallerIDMinMatch(number))) {
             return true;
         }
         return false;
@@ -59,7 +59,7 @@ public class SmsBlockerDataService extends IntentService {
                     if (addressIndex != -1) {
                         while(cursor.moveToNext()) {
                             Log.d("Batter", "get string number from db: " + cursor.getString(addressIndex));
-                            mArrayList.add(cursor.getString(addressIndex));
+                            mArrayList.add(PhoneNumberUtils.toCallerIDMinMatch(cursor.getString(addressIndex)));
                         }
                     }
                 }
